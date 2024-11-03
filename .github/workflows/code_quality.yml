@@ -1,7 +1,7 @@
 name: Code Quality
 
 # This workflow will run on every pushed commit and pull requests to check code quality.
-on: [push, pull_request, workflow_run]
+on: [push, pull_request]
 
 jobs:
     # this will build the artifacts needed for deploy using the npm run build command

@@ -1,7 +1,7 @@
 name: Security Scan
 
 # This workflow will run on every pushed commit and pull requests to check for vulnerabilities.
-on: [push, pull_request, workflow_run]
+on: [push, pull_request]
 
 jobs:
     Scan:
