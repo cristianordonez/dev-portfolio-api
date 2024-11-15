@@ -57,3 +57,14 @@ npm run test
 ```
 npm run dev
 ```
+
+```bash
+ssh root@192.81.211.81
+```
+
+Go to nginx proxy manager on port 81 of Digital Ocean Host.
+Login as Admin
+
+## Resources
+
+https://nginxproxymanager.com/guide/#quick-setup
