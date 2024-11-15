@@ -27,3 +27,10 @@ describe('GET /', () => {
             )
     })
 })
+
+describe('GET /error', () => {
+    it('should handle 500 errors', async () => {
+        const response = await request(app).get('/error')
+        expect(response.status).toBe(500)
+    })
+})

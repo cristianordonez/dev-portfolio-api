@@ -22,6 +22,10 @@ app.get<{}, MessageResponse>('/', (req, res) => {
     })
 })
 
+app.get<{}, MessageResponse>('/error', () => {
+    throw new Error('Internal server error')
+})
+
 app.use('/api/v1', api)
 
 app.use(middlewares.notFound)

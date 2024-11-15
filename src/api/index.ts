@@ -1,9 +1,9 @@
-import express from 'express'
+import { Router } from 'express'
 
 import MessageResponse from '../interfaces/MessageResponse'
 import emojis from './emojis'
 
-const router = express.Router()
+const router = Router()
 
 router.get<{}, MessageResponse>('/', (req, res) => {
     res.json({
