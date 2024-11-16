@@ -1,0 +1,30 @@
+name: Code Quality
+
+# This workflow will run on every pushed commit and pull requests to check code quality.
+on: [push, pull_request]
+
+jobs:
+    # this will build the artifacts needed for deploy using the npm run build command
+    Inspect:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+
+            - name: Install dependencies
+              run: npm install --dev
+
+            - name: Run Linter
+              run: npm run lint
+
+            - name: Run Formatter
+              run: npm run format
+
+            - name: Run unit tests
+              run: npm run test
