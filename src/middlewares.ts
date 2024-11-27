@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import ErrorResponse from './interfaces/ErrorResponse'
+import IErrorResponse from './interfaces/IErrorResponse'
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
     res.status(404)
@@ -11,14 +11,13 @@ export function notFound(req: Request, res: Response, next: NextFunction) {
 export function errorHandler(
     err: Error,
     _: Request,
-    res: Response<ErrorResponse>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    next: NextFunction
+    res: Response<IErrorResponse>
 ) {
+    console.error(err)
     const statusCode = res.statusCode !== 200 ? res.statusCode : 500
     res.status(statusCode)
     res.json({
-        message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
+        message: err.message || 'Internal Server Error',
+        stack: process.env.ENV === 'production' ? '🥞' : err.stack
     })
 }

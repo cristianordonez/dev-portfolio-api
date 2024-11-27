@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
-import MessageResponse from '../interfaces/MessageResponse'
-import emojis from './emojis'
+import MessageResponse from '../interfaces/IMessageResponse'
+import webhook from './controllers/webhook'
 
 const router = Router()
 
@@ -11,6 +11,6 @@ router.get<{}, MessageResponse>('/', (req, res) => {
     })
 })
 
-router.use('/emojis', emojis)
+router.use('/webhook', webhook)
 
 export default router

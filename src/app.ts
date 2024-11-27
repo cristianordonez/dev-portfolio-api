@@ -1,17 +1,18 @@
 import cors from 'cors'
+import 'dotenv/config'
 import express from 'express'
 import helmet from 'helmet'
 import morgan from 'morgan'
 
 import api from './api'
-import MessageResponse from './interfaces/MessageResponse'
+import MessageResponse from './interfaces/IMessageResponse'
 import * as middlewares from './middlewares'
 
 require('dotenv').config()
 
 const app = express()
 
-const env = process.env.ENV || 'dev'
+const env = process.env.ENV || 'prod'
 app.use(morgan(env))
 app.use(helmet())
 app.use(cors())

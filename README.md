@@ -22,8 +22,10 @@ npm run test
 
 ## Development
 
-```
+```bash
 npm run dev
+# start local host server for testing webhook
+ngrok http 127.0.0.1:3000 --host-header=dev-api
 ```
 
 ## Production
