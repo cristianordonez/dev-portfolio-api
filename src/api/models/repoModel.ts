@@ -3,17 +3,30 @@ import { query } from '../db'
 
 class RepoModel {
     /**
-     * todo Delete repository
+     * Get all repos for user
+     * @param userId unique id of user
+     * @returns array of repos
      */
-    public async delete() {
-        console.log('here')
+    public async get(userId: string) {
+        const sqlQuery = `
+            SELECT repos.id, repos.name, repos.image, repos.url, repos.description, repos.deploy_url 
+            FROM users 
+            INNER JOIN REPOS ON users.id = repos.user_id
+            WHERE users.id = $1
+        `
+        const values = [userId]
+        const result = await query(sqlQuery, values)
+        return result.rows
     }
 
     /**
-     * todo retrieves all repos from database
+     * Deletes from repos table
+     * @param repoId unique id of repo
      */
-    public async get() {
-        console.log('here')
+    public async delete(repoId: string) {
+        const sqlQuery = 'DELETE FROM repos where id = $1'
+        const values = [repoId]
+        await query(sqlQuery, values)
     }
 
     /**
@@ -21,25 +34,8 @@ class RepoModel {
      * @param body contents sent from Github webook
      */
     public async createOrUpdate(repoData: IRepoData): Promise<void> {
-        // const repoData = await this.getGraphQLData(
-        //     body.repository.owner.login,
-        //     body.repository.name
-        // )
         await this.insertUser(repoData.owner.id, repoData.owner.login)
         await this.insertRepo(repoData)
-        await this.insertUsersRepos(repoData.owner.id, repoData.id)
-    }
-
-    /**
-     * Update the users_repos table
-     * @param userId unique id of git user
-     * @param repoId unique id of repository
-     */
-    private async insertUsersRepos(userId: string, repoId: string) {
-        const sqlQuery =
-            'INSERT INTO USERS_REPOS (user_id, repo_id) VALUES ($1, $2) on conflict (user_id, repo_id) do nothing'
-        const values = [userId, repoId]
-        await query(sqlQuery, values)
     }
 
     /**
@@ -58,18 +54,38 @@ class RepoModel {
      * @param repoData object containing info for repo, IRepoData interface
      */
     private async insertRepo(repoData: IRepoData): Promise<void> {
-        const { id, name, openGraphImageUrl, description, url } = repoData
+        const { id, name, openGraphImageUrl, description, url, owner } =
+            repoData
+        let deployUrl = ''
+        if (
+            repoData.deployments.edges &&
+            repoData.deployments.edges.length &&
+            repoData.deployments.edges[0].node &&
+            repoData.deployments.edges[0].node.latestStatus
+        ) {
+            deployUrl =
+                repoData.deployments.edges[0].node.latestStatus.environmentUrl
+        }
         const sqlQuery = `
-        INSERT INTO repos (id, name, image, description, url)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO repos (id, name, image, description, url, deploy_url, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         ON CONFLICT (id) 
         DO UPDATE SET
             name = EXCLUDED.name,
             image = EXCLUDED.image,
             description = EXCLUDED.description,
-            url = EXCLUDED.url;
+            url = EXCLUDED.url,
+            deploy_url = EXCLUDED.deploy_url;
     `
-        const values = [id, name, openGraphImageUrl, description, url]
+        const values = [
+            id,
+            name,
+            openGraphImageUrl,
+            description,
+            url,
+            deployUrl,
+            owner.id
+        ]
         await query(sqlQuery, values)
     }
 }

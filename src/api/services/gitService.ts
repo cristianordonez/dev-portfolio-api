@@ -12,7 +12,7 @@ class GitService {
     }
 
     /**
-     *
+     * Queries graphQL github endpoint
      * @param user name of user
      * @param repoName name of repo
      * @returns reque
@@ -24,25 +24,33 @@ class GitService {
         const gqlQuery = `{
             repositoryOwner (login: "${user}") {
                 repositories {
-                totalCount
+                    totalCount
                 }
                 repository(name: "${repoName}") {
-                id
-                name
-                openGraphImageUrl
-                description
-                url
-                owner {
-                    login
                     id
-                }
-                deployments(first: 1) {
-                    edges {
-                        node {
-                            environment
-                        }
+                    name
+                    openGraphImageUrl
+                    description
+                    url
+                    owner {
+                        login
+                        id
                     }
-                }
+                    deployments(first: 1) {
+                        edges {
+                            node {
+                             id
+                             createdAt
+                             environment
+                             state
+                             latestStatus {
+                                state
+                                environmentUrl
+                                logUrl
+                             }
+                            } 
+                        } 
+                    }
                 }
             }
             }`
