@@ -10,7 +10,7 @@
         "start:dist": "node dist/src/index.js",
         "format": "prettier --write .",
         "lint": "eslint --fix src test",
-        "test": "jest",
+        "test": "ENV=test; jest",
         "typecheck": "tsc --noEmit"
     },
     "keywords": [],
@@ -28,7 +28,8 @@
         "express": "^4.21.1",
         "helmet": "^8.0.0",
         "morgan": "^1.10.0",
-        "pg": "^8.13.1"
+        "pg": "^8.13.1",
+        "zod": "^3.23.8"
     },
     "devDependencies": {
         "@types/cors": "^2.8.17",

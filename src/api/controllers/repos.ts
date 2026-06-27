@@ -28,7 +28,7 @@ router.get(
                 })
             }
             const repos = await repoModel.get(String(userId))
-            res.status(200).send({
+            res.status(200).json({
                 message: 'Successfully retrieved repositories',
                 data: repos
             })
@@ -53,7 +53,7 @@ router.delete(
             const model = new RepoModel()
             const repoId = req.query.repoId
             if (!repoId) {
-                return res.status(400).send({
+                return res.status(400).json({
                     message: 'userId is required in query parameters'
                 })
             }

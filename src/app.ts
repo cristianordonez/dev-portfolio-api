@@ -3,6 +3,7 @@ import 'dotenv/config'
 import express from 'express'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import { validatePool } from './api/db'
 
 import api from './api'
 import MessageResponse from './interfaces/IMessageResponse'
@@ -17,6 +18,7 @@ app.use(morgan(env))
 app.use(helmet())
 app.use(cors())
 app.use(express.json())
+validatePool()
 
 app.get<{}, MessageResponse>('/', (req, res) => {
     res.json({
